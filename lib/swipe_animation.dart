@@ -2,36 +2,45 @@
 
 import 'package:flutter/material.dart';
 
-import 'package:swipe_animation_blog/string.dart';
+import 'package:swipe_animation_blog/constant/string.dart';
 
-import 'colors.dart';
-import 'styles.dart';
+import 'constant/colors.dart';
+import 'constant/styles.dart';
 
-class GreetScreen extends StatefulWidget {
+class SwipeAnimation extends StatefulWidget {
   @override
-  _GreetScreenState createState() => _GreetScreenState();
+  _SwipeAnimationState createState() => _SwipeAnimationState();
 }
 
-class _GreetScreenState extends State<GreetScreen> {
+class _SwipeAnimationState extends State<SwipeAnimation> {
   Size s;
-  ValueNotifier<double> _notifier = ValueNotifier(0.0);
+  ValueNotifier<double> _valueNotifier = ValueNotifier(0.0);
+
+
   final _button = GlobalKey();
   final _pageController = PageController();
   bool isBlack = false, isLastPage = false;
 
   @override
   void initState() {
-    _pageController.addListener(() => _notifier.value = _pageController.page);
-
+    _pageController.addListener(() => _valueNotifier.value = _pageController.page);
     super.initState();
   }
+
+
+
+
+
+
 
   @override
   void dispose() {
     _pageController.dispose();
-    _notifier.dispose();
+    _valueNotifier.dispose();
     super.dispose();
   }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -41,30 +50,35 @@ class _GreetScreenState extends State<GreetScreen> {
     );
   }
 
+
+
+
+
+
+
   _buildBody() {
     return Stack(
       children: [
-        // Custom Painter
+        // first child
         AnimatedBuilder(
-          animation: _notifier,
+          animation: _valueNotifier,
           builder: (_, __) => CustomPaint(
             painter: FlowPainter(
               context: context,
-              notifier: _notifier,
+              notifier: _valueNotifier,
               target: _button,
               colors: AppColors.welcomeScreenColors,
             ),
           ),
         ),
 
-        // PageView
+        // second child
         PageView.builder(
           controller: _pageController,
           itemCount: AppColors.welcomeScreenColors.length,
           itemBuilder: (c, i) {
             isLastPage = i == 3;
             isBlack = i % 2 != 0;
-
             return Align(
               alignment: Alignment.center,
               child: Column(
@@ -115,8 +129,8 @@ class _GreetScreenState extends State<GreetScreen> {
             );
           },
         ),
-
-        // Anchor Button
+        
+        // third child
         IgnorePointer(
           child: Align(
             alignment: Alignment.bottomCenter,
@@ -124,18 +138,18 @@ class _GreetScreenState extends State<GreetScreen> {
               padding: const EdgeInsets.only(bottom: 42),
               child: ClipOval(
                 child: AnimatedBuilder(
-                  animation: _notifier,
+                  animation: _valueNotifier,
                   builder: (_, __) {
                     final animatorVal =
-                        _notifier.value - _notifier.value.floor();
+                        _valueNotifier.value - _valueNotifier.value.floor();
                     double opacity = 0, iconPos = 0;
                     int colorIndex;
                     if (animatorVal < 0.5) {
                       opacity = (animatorVal - 0.5) * -2;
                       iconPos = 90 * -animatorVal;
-                      colorIndex = _notifier.value.floor() + 1;
+                      colorIndex = _valueNotifier.value.floor() + 1;
                     } else {
-                      colorIndex = _notifier.value.floor() + 2;
+                      colorIndex = _valueNotifier.value.floor() + 2;
                       iconPos = -90;
                     }
                     if (animatorVal > 0.9) {
