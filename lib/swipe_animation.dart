@@ -63,7 +63,7 @@ class _SwipeAnimationState extends State<SwipeAnimation> {
         AnimatedBuilder(
           animation: _valueNotifier,
           builder: (_, __) => CustomPaint(
-            painter: FlowPainter(
+            painter: ExtendPainter(
               context: context,
               notifier: _valueNotifier,
               target: _button,
@@ -217,7 +217,7 @@ class _SwipeAnimationState extends State<SwipeAnimation> {
       );
 }
 
-class FlowPainter extends CustomPainter {
+class ExtendPainter extends CustomPainter {
   final BuildContext context;
   final ValueNotifier<double> notifier;
   final GlobalKey target;
@@ -225,7 +225,7 @@ class FlowPainter extends CustomPainter {
 
   RenderBox _renderBox;
 
-  FlowPainter({this.context, this.notifier, this.target, this.colors});
+  ExtendPainter({this.context, this.notifier, this.target, this.colors});
 
   @override
   void paint(Canvas canvas, Size size) {
